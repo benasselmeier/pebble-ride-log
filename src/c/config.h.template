@@ -1,0 +1,13 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// Captain Coasters API Configuration
+// Replace "your_api_key_here" with your actual API key
+#define CAPTAIN_COASTERS_API_KEY "your_api_key_here"
+#define CAPTAIN_COASTERS_BASE_URL "https://captaincoaster.com/api"
+
+// Other configuration options
+#define MAX_RIDES_CACHE 50
+#define DATA_SYNC_INTERVAL_MS 30000  // 30 seconds
+
+#endif // CONFIG_H

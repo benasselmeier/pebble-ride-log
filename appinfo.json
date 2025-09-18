@@ -1,0 +1,18 @@
+{
+  "uuid": "12345678-1234-1234-1234-123456789abc",
+  "shortName": "Forces Rec",
+  "longName": "Forces Recorder",
+  "companyName": "Ben Asselmeier",
+  "versionLabel": "1.0",
+  "versionCode": 1,
+  "sdkVersion": "3",
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {},
+  "resources": {
+    "media": []
+  },
+  "projectType": "native"
+}

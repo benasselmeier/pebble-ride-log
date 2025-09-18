@@ -1,0 +1,19 @@
+# Build files
+build/
+*.o
+*.elf
+*.bin
+*.pbw
+
+# IDE files
+.vscode/
+.idea/
+
+# Config files with API keys (keep private)
+src/c/config.h
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
