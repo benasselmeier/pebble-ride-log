@@ -1,0 +1,46 @@
+{
+  "name": "pebble-ride-log",
+  "version": "1.0.0",
+  "description": "Pebble smartwatch app for logging roller coaster and amusement rides.",
+  "author": "",
+  "private": true,
+  "keywords": [
+    "pebble",
+    "ride",
+    "logger",
+    "gforce"
+  ],
+  "dependencies": {},
+  "pebble": {
+    "displayName": "Ride Logger",
+    "uuid": "01368c2a-1d29-4b2c-9061-baf800ba3ccb",
+    "sdkVersion": "4.0",
+    "projectType": "native",
+    "messageKeys": {
+      "RideId": 0,
+      "StartTime": 1,
+      "EndTime": 2,
+      "Duration": 3,
+      "SampleCount": 4,
+      "MaxG": 5,
+      "MinG": 6,
+      "AvgG": 7,
+      "PeakX": 8,
+      "PeakY": 9,
+      "PeakZ": 10
+    },
+    "resources": {
+      "media": []
+    },
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite",
+      "emery"
+    ],
+    "watchapp": {
+      "watchface": false
+    }
+  }
+}

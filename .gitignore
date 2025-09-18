@@ -1,0 +1,7 @@
+build/
+.pbw
+waf
+
+# Pebble SDK local configuration
+.project.json
+pebble-sdk-version
