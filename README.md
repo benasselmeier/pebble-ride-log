@@ -1,5 +1,26 @@
 # Pebble Ride Log
 
+A Pebble app (and eventually companion watchface) for logging roller coaster and amusement ride forces.
+
+## Planning
+
+Product planning is now documented as user stories in [`docs/user-stories`](./docs/user-stories/00-overview.md).
+
+Start there for:
+- story order
+- acceptance criteria
+- MVP scope boundaries
+- implementation notes
+
+## Current App State
+
+The codebase currently contains an early Pebble app skeleton with a menu and placeholder interactions in `src/c/main.c`.
+
+## Development Notes
+
+- Primary target: Pebble C app.
+- Companion JS is expected for location lookup and park suggestion.
+- Keep interactions short and button-driven for ride queue usage.
 A Pebble app (and eventually a companion watchface) for logging ride forces at amusement parks.
 
 This repository currently contains an early app skeleton with a basic menu and vibration feedback. The goal is to evolve it into a fast, ride-day workflow with park-aware ride start/stop logging and at-a-glance daily stats.
