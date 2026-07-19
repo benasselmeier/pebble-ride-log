@@ -2,16 +2,19 @@
   "name": "pebble-forces-recorder",
   "author": "Ben Asselmeier",
   "version": "1.0.0",
-  "keywords": ["pebble-app"],
+  "keywords": [
+    "pebble-app"
+  ],
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "pebble-clay": "^1.0.0"
+  },
   "pebble": {
     "displayName": "Forces Recorder",
     "uuid": "12345678-1234-1234-1234-123456789abc",
     "sdkVersion": "3",
     "enableMultiJS": true,
     "targetPlatforms": [
-      "aplite",
       "basalt",
       "chalk",
       "diorite"
@@ -20,7 +23,40 @@
       "watchface": false
     },
     "messageKeys": [
-      "dummy"
+      "SETTINGS_DATA",
+      "RECORDING_MODE",
+      "G_FORCE_THRESHOLD",
+      "VIBRATE_ON_PEAKS",
+      "SOUND_ALERTS",
+      "TIME_FORMAT",
+      "G_FORCE_UNITS",
+      "SHOW_CURRENT_G",
+      "MAX_STORED_RIDES",
+      "AUTO_SAVE",
+      "REQUEST_SETTINGS",
+      "REQUEST_EXPORT",
+      "RIDE_DATA",
+      "PARK_NAME",
+      "COASTER_NAME",
+      "DURATION",
+      "MAX_G_FORCE",
+      "MIN_G_FORCE",
+      "DEVICE_TYPE",
+      "CLEAR_WATCH_DATA",
+      "VIEW_HISTORY",
+      "EXPORT_DATA",
+      "CLEAR_DATA",
+      "CLEAR_CUSTOM_COASTERS",
+      "SELECTED_PARK",
+      "CUSTOM_PARK_NAME",
+      "NEW_COASTER_NAME",
+      "NEW_COASTER_TYPE",
+      "ADD_COASTER",
+      "VIEW_PARK_COASTERS",
+      "DEFAULT_PARK_REGION",
+      "CUSTOM_COASTERS",
+      "PARK_ID",
+      "COASTER_COUNT"
     ],
     "resources": {
       "media": []

@@ -1,0 +1,102 @@
+// Memory Analysis for Forces Recorder - Aplite Optimization
+// Current memory overflow: 5,696 bytes
+
+// MEMORY USAGE CALCULATION:
+
+// Structures:
+// Park struct: 32 + 4 = 36 bytes per park
+// Coaster struct: 50 + 4 + 30 = 84 bytes per coaster
+// CustomParkData struct: 32 + 4 + (84 * 20) = 1,716 bytes per custom park
+// RideRecord struct: 32 + 32 + 4 + 4 + 4 + 8 = 84 bytes per ride
+
+// Static Arrays:
+// sixflags_parks[16]: 16 * 36 = 576 bytes
+// cedarfair_parks[11]: 11 * 36 = 396 bytes  
+// herschend_parks[6]: 6 * 36 = 216 bytes
+// disney_parks[6]: 6 * 36 = 216 bytes
+// unitedparks_parks[4]: 4 * 36 = 144 bytes
+// koch_parks[2]: 2 * 36 = 72 bytes
+// universal_parks[4]: 4 * 36 = 144 bytes
+// independent_parks[2]: 2 * 36 = 72 bytes
+// sixflags_stlouis_coasters[9]: 9 * 84 = 756 bytes
+// custom_parks[10]: 10 * 1,716 = 17,160 bytes (HUGE!)
+
+// TOTAL ESTIMATED: ~20,000+ bytes just for static data
+
+// OPTIMIZATION STRATEGIES:
+
+// 1. REDUCE CUSTOM PARKS DATA (saves ~10KB+)
+#ifdef PBL_PLATFORM_APLITE
+  #define MAX_CUSTOM_PARKS 3          // Reduce from 10 to 3
+  #define MAX_CUSTOM_COASTERS_PER_PARK 10  // Reduce from 20 to 10
+#else
+  #define MAX_CUSTOM_PARKS 10
+  #define MAX_CUSTOM_COASTERS_PER_PARK 20
+#endif
+
+// 2. REDUCE PARK DATA (saves ~1KB)
+#ifdef PBL_PLATFORM_APLITE
+  // Keep only most popular parks for Aplite
+  static Park sixflags_parks[] = {
+    {"Six Flags Magic Mountain", 0},
+    {"Six Flags Great Adventure", 0}, 
+    {"Six Flags St. Louis", 107}
+  };
+  
+  static Park cedarfair_parks[] = {
+    {"Cedar Point", 0},
+    {"Kings Island", 0}
+  };
+  
+  static Park disney_parks[] = {
+    {"Magic Kingdom", 0},
+    {"Disneyland", 0}
+  };
+  
+  static Park universal_parks[] = {
+    {"Universal Studios Florida", 0}
+  };
+#endif
+
+// 3. REDUCE STRING SIZES (saves several hundred bytes)
+#ifdef PBL_PLATFORM_APLITE
+  typedef struct {
+    char name[40];    // Reduce from 50 to 40
+    int id;
+    char type[20];    // Reduce from 30 to 20
+  } Coaster;
+  
+  typedef struct {
+    char park_name[24];    // Reduce from 32 to 24
+    char coaster_name[24]; // Reduce from 32 to 24
+    int duration_seconds;
+    int max_g_force_hundredths;
+    int min_g_force_hundredths;
+    time_t timestamp;
+  } RideRecord;
+#endif
+
+// 4. REDUCE STORED RIDES (saves ~1KB)
+#ifdef PBL_PLATFORM_APLITE
+  #define MAX_STORED_RIDES 10  // Reduce from 20 to 10
+#endif
+
+// 5. REMOVE SOME COASTER DATA FOR APLITE
+#ifdef PBL_PLATFORM_APLITE
+  static Coaster sixflags_stlouis_coasters[] = {
+    {"The Boss", 0, "Wood"},
+    {"Batman", 0, "Steel"},
+    {"Mr. Freeze", 0, "Steel"},
+    {"Ninja", 0, "Steel"}
+  };
+#endif
+
+// ESTIMATED SAVINGS:
+// Custom parks: 10,320 bytes saved (reduce from 17,160 to 6,840)
+// Park arrays: ~1,000 bytes saved
+// String reductions: ~500 bytes saved  
+// Stored rides: ~840 bytes saved
+// Coaster data: ~420 bytes saved
+
+// TOTAL ESTIMATED SAVINGS: ~13,000+ bytes
+// This should easily cover the 5,696 byte overflow
