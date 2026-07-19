@@ -1,78 +1,166 @@
-# Pebble Forces Recorder
+# Pebble Ride Log
 
-A lightweight application for Pebble smartwatches to record amusement ride forces, similar to LogRide or RideForces apps.
+A Pebble app (and eventually companion watchface) for logging roller coaster and amusement ride forces.
 
-## Features
+## Planning
 
-- **Real-time force measurement** using the Pebble's accelerometer
-- **Maximum force tracking** during rides
-- **Recording duration** tracking
-- **Offline functionality** - works without phone connection
-- **Simple menu interface** for easy operation during rides
-- **Vibration feedback** for start/stop recording
+Product planning is now documented as user stories in [`docs/user-stories`](./docs/user-stories/00-overview.md).
 
-## How to Use
+Start there for:
+- story order
+- acceptance criteria
+- MVP scope boundaries
+- implementation notes
 
-1. **Start Recording**: Select "Start Recording" from the main menu before getting on a ride
-2. **During the Ride**: The watch will continuously measure and record forces
-3. **Stop Recording**: Select "Stop Recording" after the ride ends
-4. **View Results**: Check "Current Force" and "Max Force" in the menu
+## Current App State
 
-## Controls
+The codebase currently contains an early Pebble app skeleton with a menu and placeholder interactions in `src/c/main.c`.
 
-- **UP/DOWN buttons**: Navigate menu
-- **SELECT button**: Choose menu option
-- **BACK button**: Exit app
+## Development Notes
 
-## Menu Options
+- Primary target: Pebble C app.
+- Companion JS is expected for location lookup and park suggestion.
+- Keep interactions short and button-driven for ride queue usage.
+A Pebble app (and eventually a companion watchface) for logging ride forces at amusement parks.
 
-- **Start/Stop Recording**: Begin or end force measurement
-- **Current Force**: Shows real-time acceleration in g-forces
-- **Max Force**: Shows maximum force recorded during current session
-```
-pebble-forces-recorder
-├── src
-│   ├── c
-│   │   ├── main.c          # Entry point of the application
-│   │   ├── accelerometer.c  # Accelerometer data handling
-│   │   ├── data_storage.c   # Data storage management
-│   │   └── ui.c            # User interface management
-│   └── js
-│       └── app.js          # JavaScript for additional functionality
-├── resources
-│   ├── fonts               # Font files for UI
-│   └── images              # Image files for icons and backgrounds
-├── appinfo.json           # Application metadata
-├── package.json            # npm configuration
-├── wscript                 # Build script
-└── README.md               # Project documentation
-```
+This repository currently contains an early app skeleton with a basic menu and vibration feedback. The goal is to evolve it into a fast, ride-day workflow with park-aware ride start/stop logging and at-a-glance daily stats.
 
-## Setup Instructions
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/pebble-forces-recorder.git
-   ```
-2. Navigate to the project directory:
-   ```
-   cd pebble-forces-recorder
-   ```
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Build the project:
-   ```
-   wscript build
-   ```
+## Product Vision (Target Experience)
 
-## Usage
-- Launch the application on your Pebble smartwatch.
-- Use the UI to start recording forces during your amusement rides.
-- Review recorded data directly on the watch.
+1. You arrive at a park and open the app.
+2. The app uses your location to suggest the nearest park, then asks you to confirm.
+3. The app loads that park's coaster list.
+4. You start a new ride log in a few clicks.
+5. You stop after the ride.
+6. The app shows a quick summary (max +G, min -G, airtime estimate, acceleration highlights).
+7. A watchface shows "today so far" stats throughout the day.
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any suggestions or improvements.
+---
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+## Incremental Roadmap
+
+### Phase 0 — Foundation cleanup (current sprint)
+**Goal:** Make the app codebase easier to extend before adding new features.
+
+- [ ] Split `main.c` into focused modules:
+  - `ui_menu.c` / `ui_menu.h`
+  - `ride_session.c` / `ride_session.h`
+  - `sensors.c` / `sensors.h`
+  - `storage.c` / `storage.h`
+- [ ] Define shared models:
+  - `Park`
+  - `Ride`
+  - `RideSession`
+  - `DailyStats`
+- [ ] Add a lightweight app state machine:
+  - `STATE_IDLE`
+  - `STATE_PARK_SELECTED`
+  - `STATE_RECORDING`
+  - `STATE_SUMMARY`
+
+### Phase 1 — Ride recording MVP
+**Goal:** Capture meaningful force data for one ride with clear start/stop UX.
+
+- [ ] Start/stop ride recording from menu.
+- [ ] Sample accelerometer at a fixed interval.
+- [ ] Compute per-ride core metrics:
+  - peak positive G
+  - peak negative G
+  - duration
+  - simple roughness/jerk proxy (optional)
+- [ ] Show a post-ride summary screen.
+- [ ] Persist latest session to local storage.
+
+### Phase 2 — Park mode and ride catalog
+**Goal:** Fast ride selection in a specific park.
+
+- [ ] Add a static local park + ride catalog (small seed dataset first).
+- [ ] Add "Set Current Park" flow.
+- [ ] In park mode, "New Ride" should open rides for that park.
+- [ ] Add "Quick Start" behavior:
+  - remember last ride
+  - one-click restart for repeat laps
+
+### Phase 3 — Location-assisted park suggestion
+**Goal:** Suggest the nearest park and confirm with user.
+
+- [ ] Add phone companion JS messaging for location lookup.
+- [ ] Compute nearest park from park coordinates.
+- [ ] Prompt: "Use <Park Name>?"
+- [ ] Fallback cleanly when phone/location unavailable.
+
+### Phase 4 — Daily stats + watchface MVP
+**Goal:** Show live "today's best" ride stats on a watchface.
+
+- [ ] Create a simple watchface target (time + 2 to 4 stats).
+- [ ] Aggregate day-level metrics from ride sessions:
+  - highest +G
+  - lowest -G
+  - ride with most airtime
+  - ride with highest acceleration rate
+- [ ] Refresh watchface after each completed ride.
+- [ ] Keep visuals intentionally minimal for v1.
+
+### Phase 5 — Polish and reliability
+**Goal:** Improve trust, battery behavior, and usability.
+
+- [ ] Data validation and guardrails (bad samples, accidental stops).
+- [ ] Better summary visuals and labels.
+- [ ] Export/share options (later: phone sync/cloud backup).
+- [ ] Battery/performance tuning and sampling strategy validation.
+
+---
+
+## Suggested First Build Slices
+
+If you want to move quickly without overbuilding, implement these slices in order:
+
+1. **Slice A:** Record one unnamed ride and show summary.
+2. **Slice B:** Add named ride selection from one hardcoded park.
+3. **Slice C:** Persist multiple sessions and compute "today" aggregate stats.
+4. **Slice D:** Build simple stats watchface reading daily aggregate.
+5. **Slice E:** Add location-based park suggestion.
+
+This keeps each milestone testable in the Pebble emulator and on-device.
+
+---
+
+## Data Model Sketch
+
+These structs can evolve, but this shape should support app + watchface goals:
+
+- `RideSession`
+  - `park_id`
+  - `ride_id`
+  - `start_time`
+  - `end_time`
+  - `max_pos_g`
+  - `max_neg_g`
+  - `airtime_ms_estimate`
+  - `max_accel_rate`
+- `DailyStats`
+  - `date_key`
+  - `best_pos_g`
+  - `best_neg_g`
+  - `ride_id_most_airtime`
+  - `ride_id_highest_accel`
+
+---
+
+## Immediate Next Task (recommended)
+
+Implement **Phase 1 (Ride recording MVP)** before park/location logic.
+
+Why:
+- It validates sensor pipeline and metrics first.
+- It gives real data to drive watchface design.
+- It avoids building selection/location UX on top of unproven recording.
+
+---
+
+## Development Notes
+
+- Target language: C (Pebble SDK).
+- Use Pebble Cloud for emulator iteration and debugging.
+- Keep interactions short and button-driven for in-queue usage.
+- Prefer conservative defaults and obvious confirmations while recording.
